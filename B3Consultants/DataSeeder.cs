@@ -176,28 +176,6 @@ namespace B3Consultants
             return availabilities;
         }
 
-        /*private IEnumerable<User> SetUsers()
-        {
-            var users = new List<User>()
-            {
-                new User()
-                {
-                    FirstName = "Jan",
-                    LastName = "Nowak",
-
-                },
-                new UserRole()
-                {
-                    UserRoleTitle = "Business Manager"
-                },
-                new UserRole()
-                {
-                    UserRoleTitle = "Admin"
-                }
-            };
-            return roles;
-        }*/
-
         private IEnumerable<UserRole> SetUserRoles()
         {
             var roles = new List<UserRole>()

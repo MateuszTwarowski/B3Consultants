@@ -28,7 +28,7 @@ namespace B3Consultants.Controllers
             var users = _service.GetUsers();
             return users;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public ActionResult RegisterUser(RegisterUserDTO userDTO)
         {
             _service.RegisterUser(userDTO);

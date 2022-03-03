@@ -6,12 +6,16 @@ using System.Text.Json.Serialization;
 using NLog.Web;
 using Microsoft.AspNetCore.Identity;
 using B3Consultants.Entities;
+using B3Consultants.EntitiesDTOs.Validators;
+using B3Consultants.EntitiesDTOs;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddFluentValidation();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // NLog: Setup NLog for Dependency injection
@@ -31,6 +35,8 @@ builder.Services.AddScoped<IAvailabilityService, AvailabilityService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+builder.Services.AddScoped<IValidator<RegisterUserDTO>, RegisterUserDTOValidator>();
+builder.Services.AddScoped<IValidator<AddConsultantDTO>, AddConsultantDTOValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
