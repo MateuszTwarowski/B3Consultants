@@ -24,6 +24,12 @@ namespace B3Consultants.Middleware
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundEx.Message);
             }
+            catch (BadRequestException badRequestEx)
+            {
+                _logger.LogError(badRequestEx, badRequestEx.Message);
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequestEx.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);

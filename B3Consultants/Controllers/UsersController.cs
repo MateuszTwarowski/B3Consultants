@@ -6,11 +6,13 @@ using B3Consultants.DB;
 using Microsoft.EntityFrameworkCore;
 using B3Consultants.Services;
 using B3Consultants.EntitiesDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace B3Consultants.Controllers
 {
     [ApiController]
     [Route("users")]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _service;
@@ -29,10 +31,16 @@ namespace B3Consultants.Controllers
             return users;
         }
         [HttpPost("register")]
-        public ActionResult RegisterUser(RegisterUserDTO userDTO)
+        public ActionResult RegisterUser([FromBody]RegisterUserDTO userDTO)
         {
             _service.RegisterUser(userDTO);
             return Ok();
+        }
+        [HttpPost("login")]
+        public ActionResult LoginUser([FromBody]LoginUserDTO userDTO)
+        {
+            string token = _service.GenereteJwt(userDTO);
+            return Ok(token);
         }
     }
 }

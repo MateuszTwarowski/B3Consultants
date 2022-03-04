@@ -4,11 +4,13 @@ using B3Consultants.DB;
 using Microsoft.EntityFrameworkCore;
 using B3Consultants.Services;
 using B3Consultants.EntitiesDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace B3Consultants.Controllers
 {
     [ApiController]
     [Route("experiences")]
+    [Authorize]
     public class ExperiencesController : ControllerBase
     {
         private readonly IExperienceService _service;
