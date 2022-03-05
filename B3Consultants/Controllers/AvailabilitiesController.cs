@@ -28,6 +28,7 @@ namespace B3Consultants.Controllers
             return availabilities;
         }
         [HttpPost("addAvailability")]
+        [Authorize(Roles = "Admin")]
         public ActionResult AddAvailability([FromBody]AddAvailabilityDTO availabilityDTO)
         {
             _service.AddAvailability(availabilityDTO);
@@ -36,6 +37,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPatch("modfiyAvailability{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifyAvailability([FromRoute] int id, [FromBody] AddAvailabilityDTO availabilityDTO)
         {
             _service.ModifyAvailability(availabilityDTO, id);

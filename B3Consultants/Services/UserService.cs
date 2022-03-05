@@ -38,9 +38,9 @@ namespace B3Consultants.Services
             return usersDTOs;
         }
 
-        public void RegisterUser(RegisterUserDTO UserDTO)
+        public void RegisterUser(RegisterUserDTO registerUserDTO)
         {
-            var user = _mapper.Map<User>(UserDTO);
+            var user = _mapper.Map<User>(registerUserDTO);
             var hashedpassword = _passwordHasher.HashPassword(user, user.PasswordHash);
             user.PasswordHash = hashedpassword;
 
@@ -84,6 +84,30 @@ namespace B3Consultants.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
+        }
+        public void ModifyUser(ModifyUserDTO modifyUserDTO, int id)
+        {
+            var user = _dBContext.Users.FirstOrDefault(x => x.Id == id);
+            user.FirstName = modifyUserDTO.FirstName;
+            user.LastName = modifyUserDTO?.LastName;
+            user.Email = modifyUserDTO?.Email;
+            user.PhoneNumber = modifyUserDTO?.PhoneNumber;
+            user.PasswordHash = modifyUserDTO?.PasswordHash;
+            user.UserRoleId = modifyUserDTO.UserRoleId;
+
+            var hashedpassword = _passwordHasher.HashPassword(user, user.PasswordHash);
+            user.PasswordHash = hashedpassword;
+
+            _dBContext.Users.Update(user);
+            _dBContext.SaveChanges();
+        }
+
+        public void DeleteUser(int id)
+        {
+            var user = _dBContext.Users.FirstOrDefault(x => x.Id == id);
+
+            _dBContext.Users.Remove(user);
+            _dBContext.SaveChanges();
         }
 
     }

@@ -30,6 +30,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPost("addRole")]
+        [Authorize(Roles = "Admin")]
         public ActionResult AddRole([FromBody] AddRoleDTO roleDTO)
         {
             _service.AddRole(roleDTO);
@@ -38,6 +39,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPatch("modfiyRole{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult AddRole([FromRoute] int id, [FromBody] AddRoleDTO roleDTO)
         {
 
@@ -47,6 +49,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpDelete("removeRole{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteRole([FromRoute] int id)
         {
             _service.DeleteRole(id);

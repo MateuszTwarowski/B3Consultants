@@ -29,6 +29,7 @@ namespace B3Consultants.Controllers
             return experiences;
         }
         [HttpPost("addExperience")]
+        [Authorize(Roles = "Admin")]
         public ActionResult AddExperience([FromBody] AddExperienceDTO experienceDTO)
         {
             _service.AddExperience(experienceDTO);
@@ -36,6 +37,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPatch("modfiyExperience{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult ModifyExperience([FromRoute] int id, [FromBody] AddExperienceDTO experienceDTO)
         {
             _service.ModifyExperience(experienceDTO, id);
@@ -45,6 +47,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpDelete("removeExperience{id}")]
+        [Authorize(Roles = "Admin")]
         public ActionResult DeleteExperience([FromRoute] int id)
         {
             _service.DeleteExperience(id);

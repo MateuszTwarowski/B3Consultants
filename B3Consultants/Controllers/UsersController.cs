@@ -25,22 +25,39 @@ namespace B3Consultants.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IEnumerable<UserDTO> GetUsers()
         {
             var users = _service.GetUsers();
             return users;
         }
         [HttpPost("register")]
+        [AllowAnonymous]
         public ActionResult RegisterUser([FromBody]RegisterUserDTO userDTO)
         {
             _service.RegisterUser(userDTO);
             return Ok();
         }
         [HttpPost("login")]
+        [AllowAnonymous]
         public ActionResult LoginUser([FromBody]LoginUserDTO userDTO)
         {
             string token = _service.GenereteJwt(userDTO);
             return Ok(token);
+        }
+        [HttpPatch("modifyUser{id}")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ModifyUsers([FromRoute] int id, [FromBody] ModifyUserDTO modifyUserDTO)
+        {
+            _service.ModifyUser(modifyUserDTO, id);
+            return Ok();
+        }
+        [HttpDelete("removeUser{id}")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult GetUsers([FromRoute]int id)
+        {
+            _service.DeleteUser(id);
+            return Ok();
         }
     }
 }

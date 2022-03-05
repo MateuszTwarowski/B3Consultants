@@ -8,5 +8,7 @@ namespace B3Consultants.Services
         IEnumerable<UserDTO> GetUsers();
         void RegisterUser(RegisterUserDTO UserDTO);
         string GenereteJwt(LoginUserDTO userDTO);
+        public void ModifyUser(ModifyUserDTO modifyUserDTO, int id);
+        public void DeleteUser(int id);
     }
 }
