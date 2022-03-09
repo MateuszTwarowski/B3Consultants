@@ -17,7 +17,7 @@ namespace B3Consultants.Controllers
     {
         private readonly IUserService _service;
         private readonly ILogger<UsersController> _logger;
-        
+
         public UsersController(ILogger<UsersController> logger, IUserService service)
         {
             _logger = logger;

@@ -23,9 +23,10 @@ namespace B3Consultants.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<ConsultantDTO> GetConsultants()
+        [AllowAnonymous]
+        public IEnumerable<ConsultantDTO> GetConsultants([FromQuery] string? searchphrase)
         {
-            var consultants = _service.GetConsultants();
+            var consultants = _service.GetConsultants(searchphrase);
             return consultants;
         }
 

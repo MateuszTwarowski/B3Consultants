@@ -19,14 +19,35 @@ namespace B3Consultants.Services
             _logger = logger;
         }
 
-        public IEnumerable<ConsultantDTO> GetConsultants()
+        public IEnumerable<ConsultantDTO> GetConsultants(string searchphrase)
         {
-            var consultants = _dBContext
+            List<Consultant> consultants;
+            if (searchphrase == null)
+            {
+                consultants = _dBContext
                 .Consultants
                 .Include(r => r.Role)
                 .Include(r => r.Experience)
                 .Include(r => r.Availability)
                 .ToList();
+            }
+            else
+            {
+                consultants = _dBContext
+                .Consultants
+                .Include(r => r.Role)
+                .Include(r => r.Experience)
+                .Include(r => r.Availability)
+                .Where(r => searchphrase != null &&
+                 r.FirstName.ToLower().Contains(searchphrase.ToLower())
+                || r.LastName.ToLower().Contains(searchphrase.ToLower())
+                || r.Role.RoleTitle.ToLower().Contains(searchphrase.ToLower())
+                || r.Location.ToLower().Contains(searchphrase.ToLower())
+                || r.Description.ToLower().Contains(searchphrase.ToLower())
+                || r.Experience.ExperienceLevel.ToLower().Contains(searchphrase.ToLower())
+                )
+                .ToList();
+            }
 
             var consultantsDTOs = _mapper.Map<List<ConsultantDTO>>(consultants);
             return consultantsDTOs;

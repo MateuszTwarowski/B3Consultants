@@ -5,7 +5,7 @@ namespace B3Consultants.Services
 {
     public interface IConsultantService
     {
-        IEnumerable<ConsultantDTO> GetConsultants();
+        IEnumerable<ConsultantDTO> GetConsultants(string? searchphrase);
         void AddConsultant(AddConsultantDTO consultantDTO);
         void ModifyConsultant(AddConsultantDTO consultantDTO, int id);
         void DeleteConsultant(int id);
