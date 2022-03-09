@@ -1,6 +1,6 @@
 ﻿using B3Consultants.DB;
 using B3Consultants.Entities;
-using B3Consultants.EntitiesDTOs;
+using B3Consultants.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using B3Consultants.Exceptions;

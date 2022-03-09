@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using B3Consultants.Entities;
-using B3Consultants.EntitiesDTOs;
+using B3Consultants.Models;
 
 namespace B3Consultants
 {

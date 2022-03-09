@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using B3Consultants.DB;
 
-namespace B3Consultants.EntitiesDTOs.Validators
+namespace B3Consultants.Models.Validators
 {
     public class AddConsultantDTOValidator : AbstractValidator<AddConsultantDTO>
     {
-        public AddConsultantDTOValidator (ConsultantDBContext dBContext)
+        public AddConsultantDTOValidator(ConsultantDBContext dBContext)
         {
             RuleFor(x => x.FirstName).NotEmpty()
             .Length(2, 30);

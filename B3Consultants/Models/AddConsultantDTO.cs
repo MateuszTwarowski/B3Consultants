@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace B3Consultants.EntitiesDTOs
+namespace B3Consultants.Models
 {
     public class AddConsultantDTO
     {

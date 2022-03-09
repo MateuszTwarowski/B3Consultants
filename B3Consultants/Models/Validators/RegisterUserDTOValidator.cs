@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using B3Consultants.DB;
 
-namespace B3Consultants.EntitiesDTOs.Validators
+namespace B3Consultants.Models.Validators
 {
     public class RegisterUserDTOValidator : AbstractValidator<RegisterUserDTO>
     {

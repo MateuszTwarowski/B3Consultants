@@ -1,6 +1,6 @@
 ﻿using B3Consultants.DB;
 using B3Consultants.Entities;
-using B3Consultants.EntitiesDTOs;
+using B3Consultants.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using B3Consultants.Exceptions;
@@ -19,35 +19,26 @@ namespace B3Consultants.Services
             _logger = logger;
         }
 
-        public IEnumerable<ConsultantDTO> GetConsultants(string searchphrase)
+        public IEnumerable<ConsultantDTO> GetConsultants(ConsultantQuery? query)
         {
             List<Consultant> consultants;
-            if (searchphrase == null)
-            {
-                consultants = _dBContext
-                .Consultants
-                .Include(r => r.Role)
-                .Include(r => r.Experience)
-                .Include(r => r.Availability)
-                .ToList();
-            }
-            else
-            {
-                consultants = _dBContext
-                .Consultants
-                .Include(r => r.Role)
-                .Include(r => r.Experience)
-                .Include(r => r.Availability)
-                .Where(r => searchphrase != null &&
-                 r.FirstName.ToLower().Contains(searchphrase.ToLower())
-                || r.LastName.ToLower().Contains(searchphrase.ToLower())
-                || r.Role.RoleTitle.ToLower().Contains(searchphrase.ToLower())
-                || r.Location.ToLower().Contains(searchphrase.ToLower())
-                || r.Description.ToLower().Contains(searchphrase.ToLower())
-                || r.Experience.ExperienceLevel.ToLower().Contains(searchphrase.ToLower())
-                )
-                .ToList();
-            }
+
+            consultants = _dBContext
+            .Consultants
+            .Include(r => r.Role)
+            .Include(r => r.Experience)
+            .Include(r => r.Availability)
+            .Where(r => query.SearchPhrase != null &&
+             r.FirstName.ToLower().Contains(query.SearchPhrase.ToLower())
+            || r.LastName.ToLower().Contains(query.SearchPhrase.ToLower())
+            || r.Role.RoleTitle.ToLower().Contains(query.SearchPhrase.ToLower())
+            || r.Location.ToLower().Contains(query.SearchPhrase.ToLower())
+            || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())
+            || r.Experience.ExperienceLevel.ToLower().Contains(query.SearchPhrase.ToLower())
+            )
+            .Skip(query.PageSize*(query.PageNumber - 1))
+            .Take(query.PageSize)
+            .ToList();
 
             var consultantsDTOs = _mapper.Map<List<ConsultantDTO>>(consultants);
             return consultantsDTOs;

@@ -3,7 +3,7 @@ using B3Consultants.Entities;
 using B3Consultants.DB;
 using Microsoft.EntityFrameworkCore;
 using B3Consultants.Services;
-using B3Consultants.EntitiesDTOs;
+using B3Consultants.Models;
 using Microsoft.AspNetCore.Authorization;
 
 namespace B3Consultants.Controllers
@@ -24,9 +24,9 @@ namespace B3Consultants.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<ConsultantDTO> GetConsultants([FromQuery] string? searchphrase)
+        public IEnumerable<ConsultantDTO> GetConsultants([FromQuery] ConsultantQuery query)
         {
-            var consultants = _service.GetConsultants(searchphrase);
+            var consultants = _service.GetConsultants(query);
             return consultants;
         }
 
