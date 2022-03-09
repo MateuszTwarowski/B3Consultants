@@ -19,29 +19,33 @@ namespace B3Consultants.Services
             _logger = logger;
         }
 
-        public IEnumerable<ConsultantDTO> GetConsultants(ConsultantQuery? query)
+        public PagedResult<ConsultantDTO> GetConsultants(ConsultantQuery? query)
         {
-            List<Consultant> consultants;
-
-            consultants = _dBContext
+            var baseConsultants = _dBContext
             .Consultants
             .Include(r => r.Role)
             .Include(r => r.Experience)
             .Include(r => r.Availability)
-            .Where(r => query.SearchPhrase != null &&
-             r.FirstName.ToLower().Contains(query.SearchPhrase.ToLower())
+            .Where(r => r.FirstName.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.LastName.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.Role.RoleTitle.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.Location.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.Experience.ExperienceLevel.ToLower().Contains(query.SearchPhrase.ToLower())
-            )
+            );
+
+            var pagedConsultants = baseConsultants
             .Skip(query.PageSize*(query.PageNumber - 1))
             .Take(query.PageSize)
             .ToList();
 
-            var consultantsDTOs = _mapper.Map<List<ConsultantDTO>>(consultants);
-            return consultantsDTOs;
+            var totalConsultantsNumber = baseConsultants.Count();
+
+            var consultantsDTOs = _mapper.Map<List<ConsultantDTO>>(pagedConsultants);
+
+            var result = new PagedResult<ConsultantDTO>(consultantsDTOs, totalConsultantsNumber, query.PageSize, query.PageNumber);
+
+            return result;
         }
 
         public void AddConsultant(AddConsultantDTO consultantDTO)

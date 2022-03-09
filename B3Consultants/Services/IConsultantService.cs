@@ -5,7 +5,7 @@ namespace B3Consultants.Services
 {
     public interface IConsultantService
     {
-        IEnumerable<ConsultantDTO> GetConsultants(ConsultantQuery? query);
+        PagedResult<ConsultantDTO> GetConsultants(ConsultantQuery? query);
         void AddConsultant(AddConsultantDTO consultantDTO);
         void ModifyConsultant(AddConsultantDTO consultantDTO, int id);
         void DeleteConsultant(int id);

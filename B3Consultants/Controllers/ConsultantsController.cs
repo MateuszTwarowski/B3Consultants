@@ -24,7 +24,7 @@ namespace B3Consultants.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<ConsultantDTO> GetConsultants([FromQuery] ConsultantQuery query)
+        public PagedResult<ConsultantDTO> GetConsultants([FromQuery] ConsultantQuery query)
         {
             var consultants = _service.GetConsultants(query);
             return consultants;
