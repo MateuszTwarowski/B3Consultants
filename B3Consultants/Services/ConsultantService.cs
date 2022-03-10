@@ -4,6 +4,7 @@ using B3Consultants.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using B3Consultants.Exceptions;
+using System.Linq.Expressions;
 
 namespace B3Consultants.Services
 {
@@ -33,6 +34,25 @@ namespace B3Consultants.Services
             || r.Description.ToLower().Contains(query.SearchPhrase.ToLower())
             || r.Experience.ExperienceLevel.ToLower().Contains(query.SearchPhrase.ToLower())
             );
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnsSelector = new Dictionary<string, Expression<Func<Consultant, object>>>
+                {
+                    { nameof(Consultant.Role), r => r.Role },
+                    { nameof(Consultant.Experience),  r => r.Experience},
+                    { nameof(Consultant.Availability), r => r.Availability},
+                    { nameof(Consultant.HourlyRatePlnNet), r => r.HourlyRatePlnNet},
+                    { nameof(Consultant.Location), r => r.Location},
+                };
+
+                var selectedColumn = columnsSelector[query.SortBy];
+
+                baseConsultants = query.SortDirection == SortDirections.ASC
+                    ? baseConsultants.OrderBy(selectedColumn)
+                    : baseConsultants.OrderByDescending(selectedColumn);
+
+            }
 
             var pagedConsultants = baseConsultants
             .Skip(query.PageSize*(query.PageNumber - 1))

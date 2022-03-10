@@ -61,6 +61,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IValidator<RegisterUserDTO>, RegisterUserDTOValidator>();
 builder.Services.AddScoped<IValidator<AddConsultantDTO>, AddConsultantDTOValidator>();
+builder.Services.AddScoped<IValidator<ConsultantQuery>, ConsultantQueryValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 

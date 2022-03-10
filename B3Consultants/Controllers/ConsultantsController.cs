@@ -31,7 +31,8 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPost("addConsultant")]
-        [Authorize(Roles = "Business Manager, Admin")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Business Manager, Admin")]
         public ActionResult AddConsultant([FromBody] AddConsultantDTO consultantDTO)
         {
             _service.AddConsultant(consultantDTO);
@@ -40,7 +41,8 @@ namespace B3Consultants.Controllers
         }
 
         [HttpPatch("modfiyConsultant{id}")]
-        [Authorize(Roles = "Business Manager, Admin")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Business Manager, Admin")]
         public ActionResult ModifyConsultant([FromRoute] int id, [FromBody] AddConsultantDTO consultantDTO)
         {
             _service.ModifyConsultant(consultantDTO, id);
