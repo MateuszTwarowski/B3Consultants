@@ -64,6 +64,14 @@ builder.Services.AddScoped<IValidator<AddConsultantDTO>, AddConsultantDTOValidat
 builder.Services.AddScoped<IValidator<ConsultantQuery>, ConsultantQueryValidator>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendClient", builder =>
+    builder.AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowAnyOrigin()
+    );
+});
 
 var app = builder.Build();
 
@@ -72,14 +80,13 @@ var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
 
 // Configure the HTTP request pipeline.
 
-seeder.Seed();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors("FrontendClient");
 seeder.Seed();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();

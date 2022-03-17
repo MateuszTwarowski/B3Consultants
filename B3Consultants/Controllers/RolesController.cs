@@ -23,6 +23,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Role> GetRoles()
         {
             var roles = _service.GetRoles();

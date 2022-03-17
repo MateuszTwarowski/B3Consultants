@@ -1,0 +1,45 @@
+﻿<! -- #region C#Code -->
+@page "/roles"
+@using B3Consultants.Entities;
+@using B3ConsultantsUI.Services;
+@inject IRoleService _roleService;
+
+@code {
+	private IEnumerable<Role> Roles = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		Roles = await _roleService.GetRoles();
+	}
+}
+<! -- #endregion -->
+
+
+<! -- #region HTML -->
+<h3>Roles</h3>
+@if (Roles == null)
+{
+	<h4> No roles </h4>
+}
+else
+{
+		<table class = "table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>RoleTitle</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Roles)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td>@item.RoleTitle</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+}
+<! -- #endregion -->

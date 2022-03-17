@@ -1,0 +1,80 @@
+﻿<! -- #region C#Code -->
+@page "/consultants"
+@using B3Consultants.Models;
+@using B3ConsultantsUI.Services;
+@inject IConsultantService _consultantService;
+
+@code {
+	private PagedResultModel<ConsultantDTO> Consultants = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		Consultants = await _consultantService.GetConsultants();
+	}
+}
+<! -- #endregion -->
+
+
+<! -- #region HTML -->
+<h3>ConsultantListView</h3>
+@if (Consultants == null)
+{
+	<h4> No consultants </h4>
+}
+else
+{
+		<table class = "table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>FirstName</th>
+					<th>LastName</th>
+					<th>Role</th>
+					<th>Experience</th>
+					<th>Description</th>
+					<th>HourlyRatePlnNet</th>
+					<th>Location</th>
+					<th>Availability</th>
+					<th>ProfileSource</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Consultants.Items)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td>@item.FirstName</td>
+						<td>@item.LastName</td>
+						<td>@item.Role</td>
+						<th>@item.Experience</th>
+						<td>@item.Description</td>
+						<td>@item.HourlyRatePlnNet</td>
+						<td>@item.Location</td>
+						<td>@item.Availability</td>
+						<td>@item.ProfileSource</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+
+		<table class = "table">
+			<thead>
+				<tr>
+					<th>TotalPages</th>
+					<th>ItemsFrom</th>
+					<th>ItemsTo</th>
+					<th>TotalItemsCount</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>@Consultants.TotalPages</td>
+					<td>@Consultants.ItemsFrom</td>
+					<td>@Consultants.ItemsTo</td>
+					<td>@Consultants.TotalItemsCount</td>
+				</tr>
+			</tbody>
+		</table>
+}
+<! -- #endregion -->
