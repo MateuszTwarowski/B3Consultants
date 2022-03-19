@@ -1,0 +1,90 @@
+﻿<! -- #region C#Code -->
+@page "/addConsultant"
+@using B3Consultants.Models;
+@using B3ConsultantsUI.Services;
+@inject IConsultantService consultantService;
+@inject NavigationManager NavigationManager;
+
+@code {
+    AddConsultantDTO consultant = new AddConsultantDTO();
+
+    protected async void AddConsultantFunc()
+    {
+        await consultantService.AddConsultant(consultant);
+        NavigationManager.NavigateTo("/consultants?PageSize=15&PageNumber=1");
+    }
+   void Cancel()
+   {
+       NavigationManager.NavigateTo("/consultants?PageSize=15&PageNumber=1");
+   }
+}
+<! -- #endregion -->
+
+
+<! -- #region HTML -->
+<h3>Add Consultantt:</h3>
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Firstname" class="control-label">First name</label>
+                <input form="Firstname" class="form-control" @bind="@consultant.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="Lastname" class="control-label">Last name</label>
+                <input form="Lastname" class="form-control" @bind="@consultant.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="RoleId" class="control-label">Role</label>
+                <input form="RoleId" class="form-control" @bind="@consultant.RoleId" />
+            </div>
+            <div class="form-group">
+                <label for="ExperienceId" class="control-label">Experience</label>
+                <input form="ExperienceId" class="form-control" @bind="@consultant.ExperienceId" />
+            </div>
+            <div class="form-group">
+                <label for="Description" class="control-label">Description</label>
+                <input form="Description" class="form-control" @bind="@consultant.Description" />
+            </div>
+            <div class="form-group">
+                <label for="HourlyRatePlnNet" class="control-label">Hourly rate (pln/h net)</label>
+                <input form="HourlyRatePlnNet" class="form-control" @bind="@consultant.HourlyRatePlnNet" />
+            </div>
+            <div class="form-group">
+                <label for="Location" class="control-label">Location</label>
+                <input form="Location" class="form-control" @bind="@consultant.Location" />
+            </div>
+            <div class="form-group">
+                <label for="Availability" class="control-label">Availability</label>
+                <input form="Availability" class="form-control" @bind="@consultant.AvailabilityId" />
+            </div>
+            <div class="form-group">
+                <label for="Profile source" class="control-label">Profile source</label>
+                <input form="Profile source" class="form-control" @bind="@consultant.ProfileSource" />
+            </div>
+
+
+            @*<div class="form-group">
+                <label for="Gender" class="control-label"></label>
+                <select @bind="@obj.Gender" class="form-control">
+                    <option value="">-Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>*@
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@AddConsultantFunc" value="Save"/>
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+<! -- #endregion -->

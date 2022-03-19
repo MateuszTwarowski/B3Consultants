@@ -12,8 +12,15 @@ namespace B3ConsultantsUI.Services
         }
         public async Task<PagedResultModel<ConsultantDTO>> GetConsultants()
         {
-            var consultant = await _httpClient.GetJsonAsync<PagedResultModel<ConsultantDTO>>("consultants?PageSize=15&PageNumber=1");
-            return consultant;
+            var result = await _httpClient.GetJsonAsync<PagedResultModel<ConsultantDTO>>("consultants?PageSize=15&PageNumber=1");
+            return result;
+        }
+
+        public async Task<PagedResultModel<ConsultantDTO>> AddConsultant(AddConsultantDTO consultant)
+        {
+            await _httpClient.PostJsonAsync("consultants/addConsultant", consultant);
+            var consultants = await _httpClient.GetJsonAsync<PagedResultModel<ConsultantDTO>>("consultants?PageSize=15&PageNumber=1");
+            return consultants;
         }
     }
 }

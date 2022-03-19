@@ -36,7 +36,7 @@ namespace B3Consultants.Controllers
         public ActionResult AddConsultant([FromBody] AddConsultantDTO consultantDTO)
         {
             _service.AddConsultant(consultantDTO);
-            
+
             return Created($"/consultants/{consultantDTO.FirstName} {consultantDTO.LastName}", null);
         }
 

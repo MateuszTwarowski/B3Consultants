@@ -2,7 +2,8 @@
 @page "/consultants"
 @using B3Consultants.Models;
 @using B3ConsultantsUI.Services;
-@inject IConsultantService _consultantService;
+@inject IConsultantService consultantService;
+@inject NavigationManager NavigationManager;
 
 @code {
 	private PagedResultModel<ConsultantDTO> Consultants = null;
@@ -10,14 +11,19 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		Consultants = await _consultantService.GetConsultants();
+		Consultants = await consultantService.GetConsultants();
 	}
+
+	private void NavigateToAddConsulant()
+    {
+        NavigationManager.NavigateTo("/addConsultant");
+    }
 }
 <! -- #endregion -->
 
 
 <! -- #region HTML -->
-<h3>ConsultantListView</h3>
+<h3>Consultants:</h3>
 @if (Consultants == null)
 {
 	<h4> No consultants </h4>
@@ -28,15 +34,15 @@ else
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>FirstName</th>
-					<th>LastName</th>
+					<th>First name</th>
+					<th>Last name</th>
 					<th>Role</th>
 					<th>Experience</th>
 					<th>Description</th>
-					<th>HourlyRatePlnNet</th>
+					<th>Hourly rate (pln/h net)</th>
 					<th>Location</th>
 					<th>Availability</th>
-					<th>ProfileSource</th>
+					<th>Profile source</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -51,30 +57,22 @@ else
 						<td>@item.Description</td>
 						<td>@item.HourlyRatePlnNet</td>
 						<td>@item.Location</td>
-						<td>@item.Availability</td>
-						<td>@item.ProfileSource</td>
+						<td>@item.Availability</td>				
+						<td><a href="@item.ProfileSource">Link</a></td>
+						<td><button class="btn btn-primary">Modify</button></td>
+						<td><button class="btn btn-danger">Delete</button></td>
 					</tr>
 				}
 			</tbody>
+
 		</table>
 
-		<table class = "table">
-			<thead>
-				<tr>
-					<th>TotalPages</th>
-					<th>ItemsFrom</th>
-					<th>ItemsTo</th>
-					<th>TotalItemsCount</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>@Consultants.TotalPages</td>
-					<td>@Consultants.ItemsFrom</td>
-					<td>@Consultants.ItemsTo</td>
-					<td>@Consultants.TotalItemsCount</td>
-				</tr>
-			</tbody>
-		</table>
-}
+		<button class="btn btn-success" @onclick="NavigateToAddConsulant">Add Consultant</button>
+
+		<p role="status"> Total pages: @Consultants.TotalPages</p>
+		<p role="status"> Items from: @Consultants.ItemsFrom</p>
+		<p role="status"> Items to: @Consultants.ItemsTo</p>
+		<p role="status"> Total items count: @Consultants.TotalItemsCount</p>
+}		
+
 <! -- #endregion -->
