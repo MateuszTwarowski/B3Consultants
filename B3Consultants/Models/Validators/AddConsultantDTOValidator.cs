@@ -17,7 +17,10 @@ namespace B3Consultants.Models.Validators
 
             RuleFor(x => x.ExperienceId).NotEmpty().WithMessage("Experience cannot be empty");
 
-            RuleFor(x => x.HourlyRatePlnNet).NotEmpty().WithMessage("Hourly rate cannot be empty");
+            RuleFor(x => x.HourlyRatePlnNet).NotEmpty().WithMessage("Hourly rate cannot be empty")
+                .GreaterThan(0).WithMessage("Hourly rate cannot be less than or equal 0");
+
+            RuleFor(x => x.Location).NotEmpty().WithMessage("Location cannot be empty");
 
             RuleFor(x => x.AvailabilityId).NotEmpty().WithMessage("Availability cannot be empty");
 

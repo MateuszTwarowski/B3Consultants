@@ -23,6 +23,7 @@ namespace B3Consultants.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Experience> GetExperiences()
         {
             var experiences = _service.GetExperiences();
@@ -33,7 +34,7 @@ namespace B3Consultants.Controllers
         public ActionResult AddExperience([FromBody] AddExperienceDTO experienceDTO)
         {
             _service.AddExperience(experienceDTO);
-            return Created($"/experiences/{experienceDTO.ExperienceLevel}", null);
+            return Ok();
         }
 
         [HttpPatch("modfiyExperience{id}")]

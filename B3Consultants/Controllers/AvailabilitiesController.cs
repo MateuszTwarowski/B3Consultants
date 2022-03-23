@@ -22,6 +22,7 @@ namespace B3Consultants.Controllers
             _service = service;
         }
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Availability> GetAvailabilities()
         {
             var availabilities = _service.GetAvailabilities();
@@ -33,7 +34,7 @@ namespace B3Consultants.Controllers
         {
             _service.AddAvailability(availabilityDTO);
 
-            return Created($"/availabilities/{availabilityDTO.WhenAvailable}", null);
+            return Ok();
         }
 
         [HttpPatch("modfiyAvailability{id}")]

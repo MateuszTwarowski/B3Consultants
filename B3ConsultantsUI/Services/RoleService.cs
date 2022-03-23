@@ -12,8 +12,8 @@ namespace B3ConsultantsUI.Services
         }
         public async Task<IEnumerable<Role>> GetRoles()
         {
-            var consultant = await _httpClient.GetJsonAsync<IEnumerable<Role>>("roles");
-            return consultant;
+            var roles = await _httpClient.GetJsonAsync<IEnumerable<Role>>("roles");
+            return roles;
         }
     }
 }

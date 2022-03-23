@@ -1,14 +1,25 @@
 ﻿<! -- #region C#Code -->
 @page "/addConsultant"
 @using B3Consultants.Models;
+@using B3Consultants.Entities;
 @using B3ConsultantsUI.Services;
 @using Blazored.FluentValidation;
 @inject IConsultantService consultantService;
+@inject IRoleService roleService;
+@inject IExperienceService experienceService;
+@inject IAvailabilityService availabilityService;
 @inject NavigationManager NavigationManager;
 
 <h3>Add Consultant</h3>
 
-<EditForm Model="@consultant" OnValidSubmit="@AddConsultantFunc">
+@if (Roles == null || Availabilities == null || Experiences == null)
+{
+	<h4> Loading... </h4>
+}
+
+else
+{
+<EditForm Model="@Consultant" OnValidSubmit="@AddConsultantFunc">
     <FluentValidationValidator/>
     <ValidationSummary/>
 
@@ -17,56 +28,62 @@
 
             <label class="col-form-label">First name:</label>
             <div class="col-md-6">
-                <InputText @bind-Value="@consultant.FirstName"> </InputText>
-                <ValidationMessage For="@(()=> consultant.FirstName)"/>
+                <InputText @bind-Value="@Consultant.FirstName"> </InputText>
+                <ValidationMessage For="@(()=> Consultant.FirstName)"/>
             </div>
 
             <label class="col-form-label">Last name:</label>
             <div class="col-md-6">
-                <InputText @bind-Value="@consultant.LastName"> </InputText>
-                <ValidationMessage For="@(()=> consultant.LastName)"/>
+                <InputText @bind-Value="@Consultant.LastName"> </InputText>
+                <ValidationMessage For="@(()=> Consultant.LastName)"/>
             </div>
 
-            <label class="col-form-label">Role:</label>
-            <div class="col-md-6">
-                <InputNumber @bind-Value="@consultant.RoleId"> </InputNumber>
-                <ValidationMessage For="@(()=> consultant.RoleId)"/>
-            </div>
+            <label class="col-form-label">Role:</label><br/>
+            <InputSelect Name="RoleSelect" class="w-25 p-1" @bind-Value="@Consultant.RoleId" >
+            @foreach(var item in Roles)
+            {
+                <option value="@item.Id">@item.RoleTitle</option>
+            }
+            </InputSelect><br/>
 
-            <label class="col-form-label">Experience:</label>
-            <div class="col-md-6">
-                <InputNumber @bind-Value="@consultant.ExperienceId"> </InputNumber>
-                <ValidationMessage For="@(()=> consultant.ExperienceId)"/>
-            </div>
+            <label class="col-form-label">Experience:</label><br/>
+            <InputSelect Name="ExperienceSelect" class="w-25 p-1" @bind-Value="@Consultant.ExperienceId">
+            @foreach(var item in Experiences)
+            {
+                <option value="@item.Id">@item.ExperienceLevel</option>
+            }
+            </InputSelect><br/>
 
             <label class="col-form-label">Description:</label>
             <div class="col-md-6">
-                <InputText @bind-Value="@consultant.Description"> </InputText>
-                <ValidationMessage For="@(()=> consultant.Description)"/>
+                <InputText @bind-Value="@Consultant.Description"> </InputText>
+                <ValidationMessage For="@(()=> Consultant.Description)"/>
             </div>
 
             <label class="col-form-label">Hourly rate (pln/h net):</label>
             <div class="col-md-6">
-                <InputNumber @bind-Value="@consultant.HourlyRatePlnNet"> </InputNumber>
-                <ValidationMessage For="@(()=> consultant.HourlyRatePlnNet)"/>
+                <InputNumber @bind-Value="@Consultant.HourlyRatePlnNet"> </InputNumber>
+                <ValidationMessage For="@(()=> Consultant.HourlyRatePlnNet)"/>
             </div>
 
             <label class="col-form-label">Location:</label>
             <div class="col-md-6">
-                <InputText @bind-Value="@consultant.Location"> </InputText>
-                <ValidationMessage For="@(()=> consultant.Location)"/>
+                <InputText @bind-Value="@Consultant.Location"> </InputText>
+                <ValidationMessage For="@(()=> Consultant.Location)"/>
             </div>
 
-             <label class="col-form-label">Availability:</label>
-            <div class="col-md-6">
-                <InputNumber @bind-Value="@consultant.AvailabilityId"> </InputNumber>
-                <ValidationMessage For="@(()=> consultant.AvailabilityId)"/>
-            </div>
+            <label class="col-form-label">Availability:</label><br/>
+            <InputSelect Name="AvailabilitySelect" class="w-25 p-1" @bind-Value="@Consultant.AvailabilityId" >
+            @foreach(var item in Availabilities)
+            {
+                <option value="@item.Id">@item.WhenAvailable</option>
+            }
+            </InputSelect><br/>
 
             <label class="col-form-label">Profile source:</label>
             <div class="col-md-6">
-                <InputText @bind-Value="@consultant.ProfileSource"> </InputText>
-                <ValidationMessage For="@(()=> consultant.ProfileSource)"/>
+                <InputText @bind-Value="@Consultant.ProfileSource"> </InputText>
+                <ValidationMessage For="@(()=> Consultant.ProfileSource)"/>
             </div>
         </div>
     </div>
@@ -75,18 +92,35 @@
     <button class="btn btn-danger" type="reset" @onclick="@Cancel">Cancel</button>
 
 </EditForm>
+}
 
 @code {
-    AddConsultantDTO consultant = new AddConsultantDTO();
-    string message;
+    private AddConsultantDTO Consultant = new AddConsultantDTO();
+    private IEnumerable<Role> Roles = null;
+    private IEnumerable<Experience> Experiences = null;
+    private IEnumerable<Availability> Availabilities = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Roles = await roleService.GetRoles();
+        Experiences = await experienceService.GetExperiences();
+        Availabilities = await availabilityService.GetAvailabilities();
+
+    }
 
     protected async void AddConsultantFunc()
     {
-        await consultantService.AddConsultant(consultant);
-        NavigationManager.NavigateTo("/consultants?PageSize=15&PageNumber=1");
+        if (Consultant.Description == null)
+        {
+            Consultant.Description = "";
+        }
+
+        await consultantService.AddConsultant(Consultant);
+        NavigationManager.NavigateTo("/consultants");
     }
     void Cancel()
     {
-        NavigationManager.NavigateTo("/consultants?PageSize=15&PageNumber=1");
+        NavigationManager.NavigateTo("/consultants");
     }
 }

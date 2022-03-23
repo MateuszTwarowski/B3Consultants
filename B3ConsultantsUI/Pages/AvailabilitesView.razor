@@ -1,11 +1,11 @@
 ﻿<! -- #region C#Code -->
-@page "/roles"
+@page "/availabilities"
 @using B3Consultants.Entities;
 @using B3ConsultantsUI.Services;
-@inject IRoleService roleService;
+@inject IAvailabilityService availabilityService
 
-<h3>Roles</h3>
-@if (Roles == null)
+<h3>Availabilities</h3>
+@if (Availabilities == null)
 {
 	<h4> Loading ... </h4>
 }
@@ -15,15 +15,15 @@ else
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>RoleTitle</th>
+					<th>When available</th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var item in Roles)
+				@foreach (var item in Availabilities)
 				{
 					<tr>
 						<td>@item.Id</td>
-						<td>@item.RoleTitle</td>
+						<td>@item.WhenAvailable</td>
 					</tr>
 				}
 			</tbody>
@@ -31,11 +31,11 @@ else
 }
 
 @code {
-	private IEnumerable<Role> Roles = null;
+	private IEnumerable<Availability> Availabilities = null;
 
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
-		Roles = await roleService.GetRoles();
+		Availabilities = await availabilityService.GetAvailabilities();
 	}
 }

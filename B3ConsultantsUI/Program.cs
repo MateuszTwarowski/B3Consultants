@@ -18,6 +18,16 @@ builder.Services.AddHttpClient<IRoleService, RoleService>(
     {
         client.BaseAddress = new Uri("https://localhost:7273/");
     });
+builder.Services.AddHttpClient<IExperienceService, ExperienceService>(
+    client =>
+    {
+        client.BaseAddress = new Uri("https://localhost:7273/");
+    });
+builder.Services.AddHttpClient<IAvailabilityService, AvailabilityService>(
+    client =>
+    {
+        client.BaseAddress = new Uri("https://localhost:7273/");
+    });
 
 var app = builder.Build();
 

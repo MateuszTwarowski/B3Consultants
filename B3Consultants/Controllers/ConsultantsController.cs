@@ -37,7 +37,7 @@ namespace B3Consultants.Controllers
         {
             _service.AddConsultant(consultantDTO);
 
-            return Created($"/consultants/{consultantDTO.FirstName} {consultantDTO.LastName}", null);
+            return Ok();
         }
 
         [HttpPatch("modfiyConsultant{id}")]
@@ -52,7 +52,8 @@ namespace B3Consultants.Controllers
         }
 
         [HttpDelete("removeConsultant{id}")]
-        [Authorize(Roles = "Business Manager, Admin")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Business Manager, Admin")]
         public ActionResult DeleteConsultant([FromRoute] int id)
         {
             _service.DeleteConsultant(id);

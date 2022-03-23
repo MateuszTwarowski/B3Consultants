@@ -36,7 +36,7 @@ namespace B3Consultants.Controllers
         {
             _service.AddRole(roleDTO);
 
-            return Created($"/consultants/{roleDTO.RoleTitle}", null);
+            return Ok();
         }
 
         [HttpPatch("modfiyRole{id}")]
