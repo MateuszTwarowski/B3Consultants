@@ -2,27 +2,10 @@
 @page "/consultants"
 @using B3Consultants.Models;
 @using B3ConsultantsUI.Services;
+@using System.Linq;
 @inject IConsultantService consultantService;
 @inject NavigationManager NavigationManager;
 
-@code {
-	private PagedResultModel<ConsultantDTO> Consultants = null;
-
-	protected override async Task OnInitializedAsync()
-	{
-		await base.OnInitializedAsync();
-		Consultants = await consultantService.GetConsultants();
-	}
-
-	private void NavigateToAddConsulant()
-    {
-        NavigationManager.NavigateTo("/addConsultant");
-    }
-}
-<! -- #endregion -->
-
-
-<! -- #region HTML -->
 <h3>Consultants:</h3>
 @if (Consultants == null)
 {
@@ -59,15 +42,15 @@ else
 						<td>@item.Location</td>
 						<td>@item.Availability</td>				
 						<td><a href="@item.ProfileSource">Link</a></td>
-						<td><button class="btn btn-primary">Modify</button></td>
-						<td><button class="btn btn-danger">Delete</button></td>
+						<td><button class="btn btn-primary" @onclick="@(()=> NavigationManager.NavigateTo($"modfiyConsultant{item.Id}"))">Modify</button></td>
+						<td><button class="btn btn-danger" @onclick="@(()=> DeleteConsultantFunc(item.Id))">Delete</button></td>
 					</tr>
 				}
 			</tbody>
 
 		</table>
 
-		<button class="btn btn-success" @onclick="NavigateToAddConsulant">Add Consultant</button>
+		<button class="btn btn-success" @onclick="@(()=>NavigationManager.NavigateTo("/addConsultant"))">Add Consultant</button>
 
 		<p role="status"> Total pages: @Consultants.TotalPages</p>
 		<p role="status"> Items from: @Consultants.ItemsFrom</p>
@@ -75,4 +58,22 @@ else
 		<p role="status"> Total items count: @Consultants.TotalItemsCount</p>
 }		
 
-<! -- #endregion -->
+@code {
+	private PagedResultModel<ConsultantDTO> Consultants = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		Consultants = await consultantService.GetConsultants();
+	}
+
+	protected async void DeleteConsultantFunc(int id)
+	{
+		await consultantService.RemoveConsultant(id);
+		Consultants = await consultantService.GetConsultants();
+		await InvokeAsync(() =>
+        {
+			StateHasChanged();
+        });
+	}
+}
