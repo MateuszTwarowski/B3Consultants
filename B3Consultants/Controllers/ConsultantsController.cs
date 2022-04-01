@@ -30,7 +30,15 @@ namespace B3Consultants.Controllers
             return consultants;
         }
 
-        [HttpPost("addConsultant")]
+        [HttpGet("byId/{id}")]
+        [AllowAnonymous]
+        public ConsultantDTO GetConsultantsById([FromRoute]int id)
+        {
+            var consultant = _service.GetConsultantsById(id);
+            return consultant;
+        }
+
+        [HttpPost("addConsultant")] 
         [AllowAnonymous]
         //[Authorize(Roles = "Business Manager, Admin")]
         public ActionResult AddConsultant([FromBody] AddConsultantDTO consultantDTO)
@@ -40,7 +48,7 @@ namespace B3Consultants.Controllers
             return Ok();
         }
 
-        [HttpPatch("modfiyConsultant{id}")]
+        [HttpPut("modfiyConsultant{id}")]
         [AllowAnonymous]
         //[Authorize(Roles = "Business Manager, Admin")]
         public ActionResult ModifyConsultant([FromRoute] int id, [FromBody] AddConsultantDTO consultantDTO)

@@ -68,6 +68,20 @@ namespace B3Consultants.Services
             return result;
         }
 
+        public ConsultantDTO GetConsultantsById(int id)
+        {
+            var consultant = _dBContext
+            .Consultants
+            .Include(r => r.Role)
+            .Include(r => r.Experience)
+            .Include(r => r.Availability)
+            .FirstOrDefault(consultant => consultant.Id == id);
+
+            var consultantDTO = _mapper.Map<ConsultantDTO>(consultant);
+
+            return consultantDTO;
+        }
+
         public void AddConsultant(AddConsultantDTO consultantDTO)
         {
             var consultant = _mapper.Map<Consultant>(consultantDTO);

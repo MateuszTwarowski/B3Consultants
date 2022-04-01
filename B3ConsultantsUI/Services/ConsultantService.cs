@@ -16,6 +16,12 @@ namespace B3ConsultantsUI.Services
             return result;
         }
 
+        public async Task<ConsultantDTO> GetConsultantById(int id)
+        {
+            var result = await _httpClient.GetJsonAsync<ConsultantDTO>($"/consultants/byId/{id}");
+            return result;
+        }
+
         public async Task<PagedResultModel<ConsultantDTO>> AddConsultant(AddConsultantDTO consultant)
         {
             await _httpClient.PostJsonAsync("/consultants/addConsultant", consultant);

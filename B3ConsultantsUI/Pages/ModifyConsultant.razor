@@ -1,5 +1,5 @@
 ﻿<! -- #region C#Code -->
-@page "/consultants/addConsultant"
+@page "/consultants/modifyConsultant/{Id}"
 @using B3Consultants.Models;
 @using B3Consultants.Entities;
 @using B3ConsultantsUI.Services;
@@ -10,7 +10,7 @@
 @inject IAvailabilityService availabilityService;
 @inject NavigationManager NavigationManager;
 
-<h3>Add Consultant</h3>
+<h3>Modify Consultant</h3>
 
 @if (Roles == null || Availabilities == null || Experiences == null)
 {
@@ -19,7 +19,7 @@
 
 else
 {
-<EditForm Model="@Consultant" OnValidSubmit="@AddConsultantFunc">
+<EditForm Model="@Consultant" OnValidSubmit="@ModifyConsultantFunc">
     <FluentValidationValidator/>
     <ValidationSummary/>
 
@@ -95,7 +95,10 @@ else
 }
 
 @code {
+    [Parameter]
+    public string Id { get; set; }
     private AddConsultantDTO Consultant = new AddConsultantDTO();
+    private ConsultantDTO ConsultantToModify = new ConsultantDTO();
     private IEnumerable<Role> Roles = null;
     private IEnumerable<Experience> Experiences = null;
     private IEnumerable<Availability> Availabilities = null;
@@ -103,20 +106,35 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+        ConsultantToModify = await consultantService.GetConsultantById(Convert.ToInt32(Id));
+
         Roles = await roleService.GetRoles();
         Experiences = await experienceService.GetExperiences();
         Availabilities = await availabilityService.GetAvailabilities();
 
+        var roleMapped = Roles.FirstOrDefault(x => x.RoleTitle == ConsultantToModify.Role);
+        var experienceMapped = Experiences.FirstOrDefault(x => x.ExperienceLevel == ConsultantToModify.Experience);
+        var availabilityMapped = Availabilities.FirstOrDefault(x => x.WhenAvailable == ConsultantToModify.Availability);
+
+        Consultant.FirstName = ConsultantToModify.FirstName;
+        Consultant.LastName = ConsultantToModify.LastName;
+        Consultant.RoleId = roleMapped.Id;
+        Consultant.ExperienceId = experienceMapped.Id;
+        Consultant.Description = ConsultantToModify.Description;
+        Consultant.HourlyRatePlnNet = ConsultantToModify.HourlyRatePlnNet;
+        Consultant.Location = ConsultantToModify.Location;
+        Consultant.AvailabilityId = availabilityMapped.Id;
+        Consultant.ProfileSource = ConsultantToModify.ProfileSource;
     }
 
-    protected async void AddConsultantFunc()
+    protected async void ModifyConsultantFunc()
     {
         if (Consultant.Description == null)
         {
             Consultant.Description = "";
         }
 
-        await consultantService.AddConsultant(Consultant);
+        await consultantService.ModifyConsultant(Convert.ToInt32(Id), Consultant);
         NavigationManager.NavigateTo("/consultants");
     }
     void Cancel()

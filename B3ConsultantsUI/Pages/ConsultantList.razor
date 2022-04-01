@@ -42,7 +42,7 @@ else
 						<td>@item.Location</td>
 						<td>@item.Availability</td>				
 						<td><a href="@item.ProfileSource">Link</a></td>
-						<td><button class="btn btn-primary" @onclick="@(()=> NavigationManager.NavigateTo($"modfiyConsultant{item.Id}"))">Modify</button></td>
+						<td><button class="btn btn-primary" @onclick="@(()=> NavigationManager.NavigateTo($"/consultants/modifyConsultant/{item.Id}"))">Modify</button></td>
 						<td><button class="btn btn-danger" @onclick="@(()=> DeleteConsultantFunc(item.Id))">Delete</button></td>
 					</tr>
 				}
@@ -50,7 +50,7 @@ else
 
 		</table>
 
-		<button class="btn btn-success" @onclick="@(()=>NavigationManager.NavigateTo("/addConsultant"))">Add Consultant</button>
+		<button class="btn btn-success" @onclick="@(()=>NavigationManager.NavigateTo("/consultants/addConsultant"))">Add Consultant</button>
 
 		<p role="status"> Total pages: @Consultants.TotalPages</p>
 		<p role="status"> Items from: @Consultants.ItemsFrom</p>
