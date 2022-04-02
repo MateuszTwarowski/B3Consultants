@@ -1,0 +1,21 @@
+﻿.addButton {
+    background-color: #00cccc;
+    border-radius: 8px;
+    border: 2px solid #00b0b0;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 20px;
+    padding: 7px 11px;
+    text-decoration: none;
+}
+
+.addButton:hover {
+    background-color: #00cccc;
+}
+
+.addButton:active {
+    position: relative;
+    top: 1px;
+}
