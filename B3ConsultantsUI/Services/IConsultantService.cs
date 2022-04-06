@@ -4,7 +4,7 @@ namespace B3ConsultantsUI.Services
 {
     public interface IConsultantService
     {
-        Task<PagedResultModel<ConsultantDTO>> GetConsultants();
+        Task<PagedResultModel<ConsultantDTO>> GetConsultants(int page, int pageSize);
         Task<ConsultantDTO> GetConsultantById(int id);
         Task<PagedResultModel<ConsultantDTO>> AddConsultant(AddConsultantDTO consultant);
         Task<PagedResultModel<ConsultantDTO>> RemoveConsultant(int id);

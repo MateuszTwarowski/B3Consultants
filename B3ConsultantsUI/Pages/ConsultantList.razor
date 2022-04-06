@@ -7,6 +7,7 @@
 @inject NavigationManager NavigationManager;
 
 <h3>Consultants:</h3>
+
 @if (Consultants == null)
 {
 	<h4> Loading... </h4>
@@ -51,29 +52,41 @@ else
 		</table>
 
 		<button class="btn btn-success" @onclick="@(()=>NavigationManager.NavigateTo("/consultants/addConsultant"))">Add Consultant</button>
-
-		<p role="status"> Total pages: @Consultants.TotalPages</p>
-		<p role="status"> Items from: @Consultants.ItemsFrom</p>
-		<p role="status"> Items to: @Consultants.ItemsTo</p>
-		<p role="status"> Total items count: @Consultants.TotalItemsCount</p>
 }		
+
+<Pagination TotalPages="totalPages" CurrentPage="currentPage" Radius = "2" SelectedPage = "SelectedPage"></Pagination>
 
 @code {
 	private PagedResultModel<ConsultantDTO> Consultants = null;
+	private int totalPages;
+	private int currentPage = 1;
 
 	protected override async Task OnInitializedAsync()
 	{
-		await base.OnInitializedAsync();
-		Consultants = await consultantService.GetConsultants();
+		await LoadConsulatnts();
+
+	}
+
+	private async Task SelectedPage(int page)
+	{
+		currentPage = page;
+		await LoadConsulatnts(page);
+	}
+
+	private async Task LoadConsulatnts(int page = 1, int pageSize = 5)
+	{
+		Consultants = await consultantService.GetConsultants(page, pageSize);
+		totalPages = Consultants.TotalPages;
 	}
 
 	protected async void DeleteConsultantFunc(int id)
 	{
 		await consultantService.RemoveConsultant(id);
-		Consultants = await consultantService.GetConsultants();
+		await SelectedPage(1);
 		await InvokeAsync(() =>
         {
 			StateHasChanged();
         });
+
 	}
 }
