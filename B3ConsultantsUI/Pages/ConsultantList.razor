@@ -6,7 +6,12 @@
 @inject IConsultantService consultantService;
 @inject NavigationManager NavigationManager;
 
-<h3>Consultants:</h3>
+<h3>Consultants</h3>
+
+<div class="input-group">
+  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" @bind-value="@searchPhrase"/>
+  <button type="button" class="btn btn-outline-primary" @onclick="@(()=> SearchConsulatnt())">Search</button>
+</div>
 
 @if (Consultants == null)
 {
@@ -60,6 +65,7 @@ else
 	private PagedResultModel<ConsultantDTO> Consultants = null;
 	private int totalPages;
 	private int currentPage = 1;
+	private string searchPhrase;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -79,7 +85,16 @@ else
 		totalPages = Consultants.TotalPages;
 	}
 
-	protected async void DeleteConsultantFunc(int id)
+	private async Task SearchConsulatnt(int page = 1, int pageSize = 5)
+	{
+		if(searchPhrase != null && searchPhrase.Any(x => char.IsLetter(x)))
+		{
+			Consultants = await consultantService.SearchConsultant(page, pageSize, searchPhrase);
+			totalPages = Consultants.TotalPages;
+		}
+	}
+
+	private async void DeleteConsultantFunc(int id)
 	{
 		await consultantService.RemoveConsultant(id);
 		await SelectedPage(1);

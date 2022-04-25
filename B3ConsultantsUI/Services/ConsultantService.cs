@@ -16,6 +16,12 @@ namespace B3ConsultantsUI.Services
             return result;
         }
 
+        public async Task<PagedResultModel<ConsultantDTO>> SearchConsultant(int page, int pageSize, string searchPhrase)
+        {
+            var result = await _httpClient.GetJsonAsync<PagedResultModel<ConsultantDTO>>($"/consultants?PageSize={pageSize}&PageNumber={page}&SearchPhrase={searchPhrase}");
+            return result;
+        }
+
         public async Task<ConsultantDTO> GetConsultantById(int id)
         {
             var result = await _httpClient.GetJsonAsync<ConsultantDTO>($"/consultants/byId/{id}");
